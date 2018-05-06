@@ -413,7 +413,7 @@ class App extends Component {
   handleGetMembersSubmit (event) {
     event.preventDefault ();
 
-    const { getMembers } = this.state.ToubanContractInstance;
+    const { getMembers }          = this.state.ToubanContractInstance;
     const { toubanId: _toubanId } = this.state;
 
     getMembers (
@@ -431,7 +431,7 @@ class App extends Component {
   handleCompletionSubmit (event) {
     event.preventDefault ();
 
-    const { completion } = this.state.ToubanContractInstance;
+    const { completion } 　　　　　= this.state.ToubanContractInstance;
     const { toubanId: _toubanId } = this.state;
 
     completion (
@@ -449,7 +449,7 @@ class App extends Component {
   handleGetDetailSubmit (event) {
     event.preventDefault ();
 
-    const { getDetail } = this.state.ToubanContractInstance;
+    const { getDetail } 　　　　　　= this.state.ToubanContractInstance;
     const { toubanId: _toubanId } = this.state;
 
     getDetail (
