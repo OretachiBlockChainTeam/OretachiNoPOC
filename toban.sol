@@ -83,10 +83,11 @@ contract Rotas {
         if(toubanList[_toubanId].rotaPointer + 1 == toubanList[_toubanId].rota.length) {
             return toubanList[_toubanId].rota[0];
         }
-        return toubanList[_toubanId].rota[toubanList[_toubanId].rotaPointer + 1];
+        return toubanList[_toubanId].rota[toubanList[_toubanId].rotaPointer + 1]; // user's account??
     }
 
     function addRota(uint _toubanId, uint _Id) public returns(uint _idCount) {
+        // なんで unit _Idが必要なのか。。。？
         toubanList[toubanId].rota.push(_Id);
         return toubanList[_toubanId].rota.length;
     }
