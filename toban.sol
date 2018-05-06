@@ -16,14 +16,14 @@ contract Accounts {
         return 0;
     }
 
-    function createAccount(string _name) public returns(uint _accountId) {
+    function createAccount(string _name) public payable returns(uint _accountId) {
         accountId += 1;
         //accounts[accountId].addr = _addr;
         accounts[accountId].name = _name;
         return accountId;
     }
 
-    function editAccount(uint _id, string _name) public returns(bool) {
+    function editAccount(uint _id, string _name) public payable returns(bool) {
         if(_id > accountId)
             return false;
         //accounts[_id].addr = _addr;
