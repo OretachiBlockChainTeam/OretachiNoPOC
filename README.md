@@ -1,2 +1,2 @@
-# Introduction
-This branch is the develop-branch for Toban Prototype Application.
+# システム概要
+内部専用のBlockchain技術を用いた当番システム。
