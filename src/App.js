@@ -603,8 +603,6 @@ class App extends Component {
                   <h1 className="App-title">当番管理</h1>
                 </div>
                 <div class="panel-body">
-                  <button onClick={ this.queryGetRotaCount }> Get Rota Count </button>
-                  <br />
                   <form onSubmit={ this.handleCreateToubanSubmit }>
                     <input
                       type="text"
