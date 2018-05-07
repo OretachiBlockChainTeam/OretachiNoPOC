@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import logo from './nn_logo.png';
+import logo from './logo_nn.png';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 class App extends Component {
   constructor (props) {
@@ -21,8 +23,8 @@ class App extends Component {
 				"type": "uint256"
 			}
 		],
-		"payable": true,
-		"stateMutability": "payable",
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -44,8 +46,17 @@ class App extends Component {
 				"type": "bool"
 			}
 		],
-		"payable": true,
-		"stateMutability": "payable",
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "kill",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -63,6 +74,11 @@ class App extends Component {
 		"type": "function"
 	},
 	{
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
 		"inputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -76,6 +92,20 @@ class App extends Component {
 			{
 				"name": "_count",
 				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getAccountList",
+		"outputs": [
+			{
+				"name": "_nameList",
+				"type": "string"
 			}
 		],
 		"payable": false,
@@ -123,8 +153,8 @@ class App extends Component {
 				"type": "uint256"
 			}
 		],
-		"payable": true,
-		"stateMutability": "payable",
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -142,8 +172,8 @@ class App extends Component {
 				"type": "uint256"
 			}
 		],
-		"payable": true,
-		"stateMutability": "payable",
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -169,9 +199,23 @@ class App extends Component {
 				"type": "uint256"
 			}
 		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "kill",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"payable": true,
 		"stateMutability": "payable",
-		"type": "function"
+		"type": "fallback"
 	},
 	{
 		"inputs": [],
@@ -270,9 +314,10 @@ class App extends Component {
 ]);
 
     this.state = {
-      ContractInstance: MyContract.at('0xa4efb592fe77e0e16c565d461ae02833e0c79ebe'),
-      ToubanContractInstance: ToubanContract.at('0x4fae6df038fbba2c17866e62208935362a2027d0')
+      ContractInstance: MyContract.at('0x3fd3f406c421b81dc63f8c80849fc8273e9c2df8'),
+      ToubanContractInstance: ToubanContract.at('0x7189e23ba029d93db1420c56a58d667ad2233516')
     }
+
     // Account Smart Contract
     this.queryResetAccount           = this.queryResetAccount.bind(this);
     this.queryGetAccountCount        = this.queryGetAccountCount.bind(this);
@@ -294,6 +339,7 @@ class App extends Component {
 
     resetAccount ((err) => {
       if (err) console.error('An error occured:::', err);
+      alert('全てアカウントがリセットされました。');
       console.log('All accounts have been reset');
     })
   }
@@ -303,7 +349,8 @@ class App extends Component {
 
     getAccountCount ((err, _count) => {
       if (err) console.error('An error occured:::', err);
-      console.log('This is our account count:::', _count);
+      alert('現在のアカウントの数: ' + _count.toNumber());
+      console.log('This is our account count:::', _count.toNumber());
     })
   }
 
@@ -311,10 +358,11 @@ class App extends Component {
     event.preventDefault ();
 
     const { getAccountName } = this.state.ContractInstance;
-    const { accountId: _id } = this.state;
+    const { searchAccountId: _id } = this.state;
 
     getAccountName (
       _id, (err, result) => {
+        alert('アカウントの名前: ' + result);
         console.log ('Account name is:::', result);
       }
     )
@@ -330,10 +378,8 @@ class App extends Component {
       _name,
       {
         gas: 300000,
-        from: window.web3.eth.accounts[0],
-        value: window.web3.toWei (0.01, 'ether')
       }, (err, result) => {
-        console.log ('Smart contract account is being added.');
+        alert('新規アカウントが作成されました。');
       }
     )
   }
@@ -350,9 +396,8 @@ class App extends Component {
       _name,
       {
         gas: 300000,
-        from: window.web3.eth.accounts[0],
-        value: window.web3.toWei (0.01, 'ether')
       }, (err, result) => {
+        alert('アカウント名が変更されました。');
         console.log ('Smart contract account is being edited.');
       }
     )
@@ -373,9 +418,8 @@ class App extends Component {
       _description,
       {
         gas: 300000,
-        from: window.web3.eth.accounts[0],
-        value: window.web3.toWei (0.01, 'ether')
       }, (err, result) => {
+        alert('新規当番を作成されました。');
         console.log ('Smart contract touban is being added.');
       }
     )
@@ -393,8 +437,6 @@ class App extends Component {
       _Id,
       {
         gas: 300000,
-        from: window.web3.eth.accounts[0],
-        value: window.web3.toWei (0.01, 'ether')
       }, (err, result) => {
         console.log ('Rota is being added.');
       }
@@ -406,7 +448,7 @@ class App extends Component {
 
     getRotaCount ((err, _count) => {
       if (err) console.error('An error occured:::', err);
-      console.log('This is our Rota count:::', _count);
+      console.log('This is our Rota count:::', _count.toNumber());
     })
   }
 
@@ -420,8 +462,6 @@ class App extends Component {
       _toubanId,
       {
         gas: 300000,
-        from: window.web3.eth.accounts[0],
-        value: window.web3.toWei (0.01, 'ether')
       }, (err, result) => {
         console.log ('Our members are:::', result);
       }
@@ -432,15 +472,14 @@ class App extends Component {
     event.preventDefault ();
 
     const { completion } 　　　　　= this.state.ToubanContractInstance;
-    const { toubanId: _toubanId } = this.state;
+    const { compToubanId: _toubanId } = this.state;
 
     completion (
       _toubanId,
       {
         gas: 300000,
-        from: window.web3.eth.accounts[0],
-        value: window.web3.toWei (0.01, 'ether')
       }, (err, result) => {
+        alert('当番お疲れ様です。当番の詳細情報をご確認よろしくお願いいたいます。');
         console.log ('Next Account will be:::', result);
       }
     )
@@ -450,17 +489,33 @@ class App extends Component {
     event.preventDefault ();
 
     const { getDetail } 　　　　　　= this.state.ToubanContractInstance;
-    const { toubanId: _toubanId } = this.state;
+    const { detailToubanId: _toubanId } = this.state;
 
     getDetail (
       _toubanId,
-      this.state.ContractInstance,
-      {
-        gas: 300000,
-        from: window.web3.eth.accounts[0],
-        value: window.web3.toWei (0.01, 'ether')
-      }, (err, result) => {
-        console.log ('Next Account will be:::', result);
+      '0xcebb65a4abdca96ce44c4f45876a982ff685405c',
+      (err, result) => {
+        var duty_title           = result[0];
+        var duty_desc            = result[1];
+        var current_account_id   = result[2].toNumber();
+        var next_account         = result[3].toNumber();
+        var prev_account         = result[4].toNumber();
+        var compTimestamp        = result[5].toNumber();
+        var current_account_name = result[8];
+        var member_ids = "";
+        for (var i = 1; i <= result[7].length; i++) {
+          member_ids += i + ",";
+        }
+        var message = "当番の詳細情報は以下となります \n" +
+        "当番タイトル:  " + duty_title + "\n" +
+        "当番説明:  " + duty_desc + "\n" +
+        "現在のアカウントID:  " + current_account_id + "\n" +
+        "現在の担当者名:  " + current_account_name + "\n" +
+        "次のアカウントID:  " + next_account + "\n" +
+        "前のアカウントID:  " + prev_account + "\n" +
+        "完了時刻:  " + compTimestamp + "\n" +
+        "参加するメンバのアカウントID: " + member_ids + "\n";
+        alert(message);
       }
     )
   }
@@ -468,139 +523,161 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Toban System Prototype</h1>
-        </header>
-        <br />
-        <br />
-        <button onClick={ this.queryResetAccount }> Reset All Account </button>
-        <br />
-        <br />
-        <button onClick={ this.queryGetAccountCount }> Get Account Count </button>
-        <br />
-        <br />
-        <form onSubmit={ this.handleGetAccountNameSubmit }>
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter account id..."
-            value ={ this.state.accountId }
-            onChange={ event => this.setState ({ accountId: event.target.value }) } />
-          <button type="submit"> Search For Account </button>
-        </form>
-        <br />
-        <br />
-        <form onSubmit={ this.handleContractAccountSubmit }>
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter new account name..."
-            value ={ this.state.newAccount }
-            onChange={ event => this.setState ({ newAccount: event.target.value }) } />
-          <button type="submit"> Create New Account </button>
-        </form>
-        <br />
-        <br />
-        <form onSubmit={ this.handleEditAccountSubmit }>
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter accountId"
-            value ={ this.state.accountId }
-            onChange={ event => this.setState ({ accountId: event.target.value }) } />
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter New Account Name"
-            value ={ this.state.accountName }
-            onChange={ event => this.setState ({ accountName: event.target.value }) } />
-          <button type="submit"> Update Account Name </button>
-        </form>
-        <br />
-        <br />
-        <br />
-        <br />
-        <form onSubmit={ this.handleCreateToubanSubmit }>
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter ownerId"
-            value ={ this.state.ownerId }
-            onChange={ event => this.setState ({ ownerId: event.target.value }) } />
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter Touban's Title"
-            value ={ this.state.title }
-            onChange={ event => this.setState ({ title: event.target.value }) } />
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter Touban's Description"
-            value ={ this.state.desc }
-            onChange={ event => this.setState ({ desc: event.target.value }) } />
-          <button type="submit"> Create New Touban </button>
-        </form>
-        <br />
-        <br />
-        <form onSubmit={ this.handleAddRotaSubmit }>
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter toubanId"
-            value ={ this.state.toubanId }
-            onChange={ event => this.setState ({ toubanId: event.target.value }) } />
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter rotaId"
-            value ={ this.state.rotaId }
-            onChange={ event => this.setState ({ rotaId: event.target.value }) } />
-          <button type="submit"> Create New Rota </button>
-        </form>
-        <br />
-        <br />
-        <button onClick={ this.queryGetRotaCount }> Get Rota Count </button>
-        <br />
-        <br />
-        <br />
-        <br />
-        <form onSubmit={ this.handleCompletionSubmit }>
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter touban id..."
-            value ={ this.state.toubanId }
-            onChange={ event => this.setState ({ toubanId: event.target.value }) } />
-          <button className="completion-button" type="submit"> Touban Complete! </button>
-        </form>
-        <br />
-        <br />
-        <br />
-        <br />
-        <form onSubmit={ this.handleGetDetailSubmit }>
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter touban id..."
-            value ={ this.state.toubanId }
-            onChange={ event => this.setState ({ toubanId: event.target.value }) } />
-          <button type="submit"> Get Detail </button>
-        </form>
-        <br />
-        <br />
-        <form onSubmit={ this.handleGetMembersSubmit }>
-          <input
-            type="text"
-            name="state-change"
-            placeholder="Enter touban id..."
-            value ={ this.state.toubanId }
-            onChange={ event => this.setState ({ toubanId: event.target.value }) } />
-          <button type="submit"> Get Members </button>
-        </form>
-        <br />
-        <br />
+        <div class="container-background">
+          <div class="container-fluid p-3 mb-2 text-dark">
+            <div class="app-header">
+              <br />
+              <br />
+              <br />
+              <br />
+              <img src={logo} className="App-logo" alt="logo"/>
+              <br />
+              <br />
+              <h1 className="App-title">Duty Chain System</h1>
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+            </div>
+            <div class="p-3 mb-2 bg-white text-dark">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <span class="glyphicon glyphicon-user"></span>
+                  <h1 className="App-title">アカウント管理</h1>
+                </div>
+                <div class="panel-body">
+                  <br />
+                  <form onSubmit={ this.handleContractAccountSubmit }>
+                    <input
+                      type="text"
+                      name="create_account"
+                      size="40"
+                      placeholder="新規アカウントを入力してください"
+                      value ={ this.state.newAccount }
+                      onChange={ event => this.setState ({ newAccount: event.target.value }) } />
+                    <button type="submit" class="btn btn-outline-success"> 新規アカウント作成 </button>
+                  </form>
+                  <br />
+                  <form onSubmit={ this.handleGetAccountNameSubmit }>
+                    <input
+                      type="text"
+                      name="get_account"
+                      size="40"
+                      placeholder="検索したいアカウントIDを入力してください"
+                      value ={ this.state.searchAccountId }
+                      onChange={ event => this.setState ({ searchAccountId: event.target.value }) } />
+                    <button class="btn btn-outline-warning" type="submit"> 検索する </button>
+                  </form>
+                  <br />
+                  <form onSubmit={ this.handleEditAccountSubmit }>
+                    <input
+                      type="text"
+                      name="edit_account_id"
+                      placeholder="アカウントID"
+                      value ={ this.state.accountId }
+                      onChange={ event => this.setState ({ accountId: event.target.value }) } />
+                    <input
+                      type="text"
+                      name="edit_account_name"
+                      size="40"
+                      placeholder="新規名前を入力してください"
+                      value ={ this.state.accountName }
+                      onChange={ event => this.setState ({ accountName: event.target.value }) } />
+                    <button class="btn btn-outline-primary" type="submit"> 名前変更 </button>
+                  </form>
+                  <br />
+                  <br />
+                  <button class="btn btn-danger" onClick={ this.queryResetAccount }> アカウントリセット </button>
+                  <button class="btn btn-primary" onClick={ this.queryGetAccountCount }> アカウントの数 </button>
+                  <br />
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <div class="panel-heading">
+                  <span class="glyphicon glyphicon-user"></span>
+                  <h1 className="App-title">当番管理</h1>
+                </div>
+                <div class="panel-body">
+                  <button onClick={ this.queryGetRotaCount }> Get Rota Count </button>
+                  <br />
+                  <form onSubmit={ this.handleCreateToubanSubmit }>
+                    <input
+                      type="text"
+                      name="create_duty_owner_id"
+                      placeholder="所有者のアカウントID"
+                      value ={ this.state.ownerId }
+                      onChange={ event => this.setState ({ ownerId: event.target.value }) } />
+                    <input
+                      type="text"
+                      name="create_duty_title"
+                      placeholder="当番のタイトル"
+                      value ={ this.state.title }
+                      onChange={ event => this.setState ({ title: event.target.value }) } />
+                    <input
+                      type="text"
+                      name="create_duty_desc"
+                      size="30"
+                      placeholder="当番の説明を入力してください"
+                      value ={ this.state.desc }
+                      onChange={ event => this.setState ({ desc: event.target.value }) } />
+                    <button class="btn btn-outline-success"　type="submit"> 新規当番の作成 </button>
+                  </form>
+                  <br />
+                  <form onSubmit={ this.handleAddRotaSubmit }>
+                    <input
+                      type="text"
+                      name="add_rota_duty_id"
+                      placeholder="当番ID"
+                      value ={ this.state.toubanId }
+                      onChange={ event => this.setState ({ toubanId: event.target.value }) } />
+                    <input
+                      type="text"
+                      name="add_rota_id"
+                      size="40"
+                      placeholder="ローテーションIDを入力してください"
+                      value ={ this.state.rotaId }
+                      onChange={ event => this.setState ({ rotaId: event.target.value }) } />
+                    <button class="btn btn-outline-warning"　type="submit"> ローテーションを作成 </button>
+                  </form>
+                  <br />
+                  <form onSubmit={ this.handleCompletionSubmit }>
+                    <input
+                      type="text"
+                      name="completion_dudy_id"
+                      size="30"
+                      placeholder="当番IDを入力してください"
+                      value ={ this.state.compToubanId }
+                      onChange={ event => this.setState ({ compToubanId: event.target.value }) } />
+                    <button class="btn btn-success" type="submit"> 完了 </button>
+                  </form>
+                  <br />
+                  <form onSubmit={ this.handleGetDetailSubmit }>
+                    <input
+                      type="text"
+                      name="getdetail_duty_id"
+                      size="30"
+                      placeholder="当番IDを入力してください"
+                      value ={ this.state.detailToubanId }
+                      onChange={ event => this.setState ({ detailToubanId: event.target.value }) } />
+                    <button　class="btn btn-outline-warning" type="submit"> 当番の詳細 </button>
+                  </form>
+
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+              </div>
+            </div>
+
+      </div>
+      </div>
       </div>
     );
   }

@@ -19,6 +19,31 @@
   color: white;
 }
 
+.container-fluid {
+  max-width: 700px;
+  padding: 30px;
+  background-color: #BDC3C7
+}
+
+.container-background {
+  background-color: #212F3C
+}
+
+.panel-heading {
+  text-align: left;
+}
+
+.panel-body {
+  text-align: left;
+}
+
+
+.app-header {
+  max-width: 700px;
+  max-height: 300px;
+  background-color: #F4F6F7
+}
+
 .App-title {
   font-size: 1.5em;
 }
