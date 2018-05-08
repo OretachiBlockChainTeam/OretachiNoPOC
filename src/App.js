@@ -314,13 +314,14 @@ class App extends Component {
 ]);
 
     this.state = {
-      ContractInstance: MyContract.at('0x3fd3f406c421b81dc63f8c80849fc8273e9c2df8'),
-      ToubanContractInstance: ToubanContract.at('0x7189e23ba029d93db1420c56a58d667ad2233516')
+      ContractInstance: MyContract.at('0x56abec0abd2f3fb30ba64ec50c10c14442b7b90d'),
+      ToubanContractInstance: ToubanContract.at('0xa1efe9f48b2725053e8be92cbbd5eb11dfc18cda')
     }
 
     // Account Smart Contract
     this.queryResetAccount           = this.queryResetAccount.bind(this);
     this.queryGetAccountCount        = this.queryGetAccountCount.bind(this);
+    this.queryGetAccountList         = this.queryGetAccountList.bind(this);
     this.handleGetAccountNameSubmit  = this.handleGetAccountNameSubmit.bind (this);
     this.handleContractAccountSubmit = this.handleContractAccountSubmit.bind (this);
     this.handleEditAccountSubmit     = this.handleEditAccountSubmit.bind (this);
@@ -354,6 +355,20 @@ class App extends Component {
     })
   }
 
+  queryGetAccountList () {
+    const { getAccountList } = this.state.ContractInstance;
+
+    getAccountList ((err, result) => {
+      if (err) console.error('An error occured:::', err);
+      var list_name = result.split(",");
+      var list;
+      for (var i = 0; i < list_name.length; i++) {
+        list += (i + 1) + " : " + list_name[i] + "\n";
+      }
+      alert('アカウントリスト: \n"' + list);
+    })
+  }
+
   handleGetAccountNameSubmit (event) {
     event.preventDefault ();
 
@@ -378,7 +393,7 @@ class App extends Component {
       _name,
       {
         gas: 300000,
-      }, (err, result) => {
+      }, (err, _accountId) => {
         alert('新規アカウントが作成されました。');
       }
     )
@@ -493,7 +508,7 @@ class App extends Component {
 
     getDetail (
       _toubanId,
-      '0xcebb65a4abdca96ce44c4f45876a982ff685405c',
+      '0x56abec0abd2f3fb30ba64ec50c10c14442b7b90d',
       (err, result) => {
         var duty_title           = result[0];
         var duty_desc            = result[1];
@@ -503,9 +518,14 @@ class App extends Component {
         var compTimestamp        = result[5].toNumber();
         var current_account_name = result[8];
         var member_ids = "";
-        for (var i = 1; i <= result[7].length; i++) {
-          member_ids += i + ",";
+
+        var date = new Date(compTimestamp*1000);
+
+        for (var i = 0; i < result[7].length; i++) {
+          member_ids += result[7][i] + ",";
         }
+        member_ids = member_ids.slice(0, -1);
+
         var message = "当番の詳細情報は以下となります \n" +
         "当番タイトル:  " + duty_title + "\n" +
         "当番説明:  " + duty_desc + "\n" +
@@ -513,7 +533,7 @@ class App extends Component {
         "現在の担当者名:  " + current_account_name + "\n" +
         "次のアカウントID:  " + next_account + "\n" +
         "前のアカウントID:  " + prev_account + "\n" +
-        "完了時刻:  " + compTimestamp + "\n" +
+        "完了時刻:  " + date + "\n" +
         "参加するメンバのアカウントID: " + member_ids + "\n";
         alert(message);
       }
@@ -553,7 +573,7 @@ class App extends Component {
                       type="text"
                       name="create_account"
                       size="40"
-                      placeholder="新規アカウントを入力してください"
+                      placeholder="新規アカウント使用者名を入力してください"
                       value ={ this.state.newAccount }
                       onChange={ event => this.setState ({ newAccount: event.target.value }) } />
                     <button type="submit" class="btn btn-outline-success"> 新規アカウント作成 </button>
@@ -590,6 +610,7 @@ class App extends Component {
                   <br />
                   <button class="btn btn-danger" onClick={ this.queryResetAccount }> アカウントリセット </button>
                   <button class="btn btn-primary" onClick={ this.queryGetAccountCount }> アカウントの数 </button>
+                  <button class="btn btn-info" onClick={ this.queryGetAccountList }> アカウントのリスト </button>
                   <br />
                 </div>
                 <br />
@@ -607,7 +628,7 @@ class App extends Component {
                     <input
                       type="text"
                       name="create_duty_owner_id"
-                      placeholder="所有者のアカウントID"
+                      placeholder="アカウントID"
                       value ={ this.state.ownerId }
                       onChange={ event => this.setState ({ ownerId: event.target.value }) } />
                     <input
@@ -637,10 +658,10 @@ class App extends Component {
                       type="text"
                       name="add_rota_id"
                       size="40"
-                      placeholder="ローテーションIDを入力してください"
+                      placeholder="当番に追加するアカウントIDを入力してください"
                       value ={ this.state.rotaId }
                       onChange={ event => this.setState ({ rotaId: event.target.value }) } />
-                    <button class="btn btn-outline-warning"　type="submit"> ローテーションを作成 </button>
+                    <button class="btn btn-outline-warning"　type="submit"> ローテーションに追加 </button>
                   </form>
                   <br />
                   <form onSubmit={ this.handleCompletionSubmit }>
@@ -651,7 +672,7 @@ class App extends Component {
                       placeholder="当番IDを入力してください"
                       value ={ this.state.compToubanId }
                       onChange={ event => this.setState ({ compToubanId: event.target.value }) } />
-                    <button class="btn btn-success" type="submit"> 完了 </button>
+                    <button class="btn btn-success" type="submit"> 次に回す </button>
                   </form>
                   <br />
                   <form onSubmit={ this.handleGetDetailSubmit }>
