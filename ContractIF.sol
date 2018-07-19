@@ -1,3 +1,3 @@
-contract PersonIF{
+contract ContractIF{
     function notifyCall() public payable;
 }
