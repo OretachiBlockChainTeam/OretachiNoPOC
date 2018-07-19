@@ -1,8 +1,14 @@
 pragma solidity ^0.4.24;
 
-import "https://github.com/OretachiBlockChainTeam/OretachiNoPOC/PersonContractIF.sol" ;
+import "https://github.com/OretachiBlockChainTeam/OretachiNoPOC/ContractIF.sol" ;
+//import "https://github.com/OretachiBlockChainTeam/OretachiNoPOC/PersonIF.sol" ;
 
-contract HellowWorld{
+contract PersonIF{
+    function addContract(address contractAddress) public payable;
+}
+
+
+contract HellowWorld is PersonIF{
 
     address[] public tmpAdList;
     address[] public adList;
@@ -12,7 +18,7 @@ contract HellowWorld{
         
     }
     
-    function addAddress(address toAdded) public payable{
+    function addContract(address contractAddress) public payable{
         uint len = adList.length;
         uint i = 0;
         
@@ -26,7 +32,7 @@ contract HellowWorld{
         for(i = 0; i < len ;i++){
             adList[i] = tmpAdList[i];
         }
-        adList[len] = toAdded;
+        adList[len] = contractAddress;
         listLength = adList.length;
     }
     
