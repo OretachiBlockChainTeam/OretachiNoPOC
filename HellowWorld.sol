@@ -1,5 +1,7 @@
 pragma solidity ^0.4.24;
 
+import "https://github.com/OretachiBlockChainTeam/OretachiNoPOC/PersonContractIF.sol" ;
+
 contract HellowWorld{
 
     address[] public tmpAdList;
@@ -36,29 +38,8 @@ contract HellowWorld{
     }
     
     function callBonjuor(address bonjourAddress){
-        BonjourWorld bw = BonjourWorld(bonjourAddress);
-        bw.notifyCall();
+        ContractIF con = ContractIF(bonjourAddress);
+        con.notifyCall();
         
     }
-}
-
-contract BonjourWorld {
-    string public s = '';
-    
-    function notifyCall() payable{
-        s = 'I am called';
-    }
-    
-    function clearString() payable{
-        s = '';
-    }   
-    
-    function registerBonjour(address hellowAddress) public payable{
-        HellowWorld hw = HellowWorld(hellowAddress);
-        hw.addAddress(this);
-    }
-}
-
-contract PersonIF{
-    function notifyCall() public payable;
 }
